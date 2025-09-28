@@ -1,0 +1,39 @@
+description: Multimedia VM
+name: multimedia
+
+config:
+  limits.memory: 8GiB
+  limits.cpu: 4
+  cloud-init.user-data: |-
+    #cloud-config
+    runcmd:
+      - [mkdir, /mnt/tyler]
+      - [mkdir, /mnt/public]
+      - [mkdir, /mnt/torrents]
+    users: 
+      - name: tyler
+        primary_group: tyler
+        shell: /bin/bash
+        groups: 
+          - users
+          - sudo
+    timezone: US/Central
+    package_update: true
+    package_upgrade: true
+    package_reboot_if_required: true
+    packages:
+      - openssh-server
+      - htop
+      - tmux
+      - apt-cacher-ng
+      - bash-completion
+
+devices:
+  root:
+    type: disk
+    path: /
+    pool: default
+    size: 20GiB
+  sata:
+    address: '0000:03:00.0'
+    type: pci
